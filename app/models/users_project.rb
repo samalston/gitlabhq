@@ -62,6 +62,28 @@ class UsersProject < ActiveRecord::Base
       end
     end
   end
+  
+  def self.user_bulk_update(user, project_ids, project_access)
+    UsersProject.transaction do
+      # Update the items that already exist
+      UsersProject.where(:user_id => user.id, :project_id => project_ids).each do |users_project|
+        users_project.project_access = project_access
+        users_project.save
+      end
+      
+      # Create the ones that don't exist
+      project_ids.each do |project_id|
+        unless UsersProject.exists?(:user_id => user.id, :project_id => project_id)
+          users_project = UsersProject.new(
+            project_access: project_access,
+            user_id: user.id
+          )
+          users_project.project_id = project_id
+          users_project.save
+        end
+      end
+    end
+  end
 
   def self.access_roles
     {

@@ -22,7 +22,6 @@ class Admin::ProjectsController < AdminController
 
   def team_update
     @admin_project.add_users_ids_to_team(params[:user_ids], params[:project_access])
-
     redirect_to [:admin, @admin_project], notice: 'Project was successfully updated.'
   end
 
@@ -31,6 +30,11 @@ class Admin::ProjectsController < AdminController
     @admin_project.owner = current_user
 
     if @admin_project.save
+      # Add all of the admin users to the project as Masters
+      User.where(:admin => "1").each do |user|
+        UsersProject.user_bulk_update(user, [@admin_project.id], "40")
+      end
+
       redirect_to [:admin, @admin_project], notice: 'Project was successfully created.'
     else
       render action: "new"

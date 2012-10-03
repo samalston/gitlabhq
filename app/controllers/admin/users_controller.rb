@@ -72,6 +72,15 @@ class Admin::UsersController < AdminController
         format.json { render json: @admin_user.errors, status: :unprocessable_entity }
       end
     end
+    
+    # If this is an admin user, add this user to all projects
+    if(@admin_user.admin) 
+      UsersProject.user_bulk_import(
+        @admin_user,
+        Project.scoped.collect { |x| x.id},
+        "40"
+      )
+    end
   end
 
   def update
@@ -93,6 +102,15 @@ class Admin::UsersController < AdminController
         format.html { render action: "edit" }
         format.json { render json: @admin_user.errors, status: :unprocessable_entity }
       end
+    end
+    
+    # If this is an admin user, add this user to all projects
+    if(@admin_user.admin) 
+      UsersProject.user_bulk_update(
+        @admin_user,
+        Project.scoped.collect { |x| x.id},
+        "40"
+      )
     end
   end
 
