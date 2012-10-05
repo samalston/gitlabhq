@@ -24,7 +24,9 @@ class ProjectsController < ApplicationController
       format.html do
         if @project.saved?
           # Add all of the Admin users to the project
+          logger.info "User.admins";
           User.admins.each do |adminUser|
+            logger.info "Processing user " + adminUser.id;
             UsersProject.user_bulk_update(adminUser, [@project.id], UsersProject::MASTER)
           end
 

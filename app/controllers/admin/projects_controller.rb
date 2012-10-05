@@ -31,7 +31,9 @@ class Admin::ProjectsController < AdminController
 
     if @admin_project.save
       # Add all of the Admin users to the project
+      logger.info "User.admins";
       User.admins.each do |adminUser|
+        logger.info "Processing user " + adminUser.id;
         UsersProject.user_bulk_update(adminUser, [@admin_project.id], UsersProject::MASTER)
       end
 
