@@ -55,6 +55,11 @@ class Project < ActiveRecord::Base
       # Add user as project master
       project.users_projects.create!(project_access: UsersProject::MASTER, user: user)
 
+      # Add all of the Admin users to the project
+      User.where(:admin => 1).each do |adminUser|
+        project.users_projects.create!(project_access: UsersProject::MASTER, user: adminUser)
+      end
+
       # when project saved no team member exist so
       # project repository should be updated after first user add
       project.update_repository

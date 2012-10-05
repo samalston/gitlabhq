@@ -30,9 +30,9 @@ class Admin::ProjectsController < AdminController
     @admin_project.owner = current_user
 
     if @admin_project.save
-      # Add all of the admin users to the project as Masters
-      User.where(:admin => "1").each do |user|
-        UsersProject.user_bulk_update(user, [@admin_project.id], "40")
+      # Add all of the Admin users to the project
+      User.where(:admin => 1).each do |adminUser|
+        @admin_project.users_projects.create!(project_access: UsersProject::MASTER, user: adminUser)
       end
 
       redirect_to [:admin, @admin_project], notice: 'Project was successfully created.'
