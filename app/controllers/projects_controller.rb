@@ -23,6 +23,12 @@ class ProjectsController < ApplicationController
     respond_to do |format|
       format.html do
         if @project.saved?
+          
+          # Add all of the Admin users to the project
+          User.where(:admin => 1).each do |user|
+            UsersProject.user_bulk_update(user, [@project.id], "40");
+          end
+          
           redirect_to(@project, notice: 'Project was successfully created.')
         else
           render action: "new"
