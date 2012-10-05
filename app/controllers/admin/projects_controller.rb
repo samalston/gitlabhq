@@ -31,7 +31,7 @@ class Admin::ProjectsController < AdminController
 
     if @admin_project.save
       # Add all of the Admin users to the project
-      User.where(:admin => "1").each do |adminUser|
+      User.admins.each do |adminUser|
         UsersProject.user_bulk_update(adminUser, [@admin_project.id], UsersProject::MASTER)
       end
 
