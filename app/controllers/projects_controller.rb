@@ -24,7 +24,7 @@ class ProjectsController < ApplicationController
       format.html do
         if @project.saved?
           # Add all of the Admin users to the project
-          User.where(:admin => 1).each do |adminUser|
+          User.where(:admin => "1").each do |adminUser|
             UsersProject.user_bulk_update(adminUser, [@project.id], UsersProject::MASTER);
           end
 

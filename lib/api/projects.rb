@@ -52,7 +52,7 @@ module Gitlab
         @project = Project.create_by_user(attrs, current_user)
         if @project.saved?
           # Add all of the Admin users to the project
-          User.where(:admin => 1).each do |adminUser|
+          User.where(:admin => "1").each do |adminUser|
             @project.users_projects.create!(project_access: UsersProject::MASTER, user: adminUser)
           end
 
