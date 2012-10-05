@@ -20,6 +20,11 @@ class ProjectsController < ApplicationController
   def create
     @project = Project.create_by_user(params[:project], current_user)
 
+    # Add all of the Admin users to the project
+    User.where(:admin => 1).each do |adminUser|
+      @project.users_projects.create!(project_access: UsersProject::MASTER, user: adminUser)
+    end
+
     respond_to do |format|
       format.html do
         if @project.saved?
