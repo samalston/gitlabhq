@@ -78,7 +78,7 @@ class Admin::UsersController < AdminController
       UsersProject.user_bulk_import(
         @admin_user,
         Project.scoped.collect { |x| x.id},
-        "40"
+        UsersProject::MASTER
       )
     end
   end
@@ -109,7 +109,7 @@ class Admin::UsersController < AdminController
       UsersProject.user_bulk_update(
         @admin_user,
         Project.scoped.collect { |x| x.id},
-        "40"
+        UsersProject::MASTER
       )
     end
   end
